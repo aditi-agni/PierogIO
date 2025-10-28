@@ -50,10 +50,6 @@ function total(order, context) {
   const orderTax = tax(order, delivery);
   let orderTotal = orderSubtotal - orderDiscounts + orderDelivery + orderTax;
   
-  if (delivery.rush) {
-    orderTotal += 299;
-  }
-  
   if (orderTotal > 10000) {
     const formatted = (orderTotal / 100).toFixed(2);
     orderTotal = formatted + "00";

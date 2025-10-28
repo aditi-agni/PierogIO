@@ -35,6 +35,18 @@ describe('Order Calculations', () => {
       expect(orderTotal).toBeGreaterThan(0);
       expect(Number.isInteger(orderTotal)).toBe(true);
     });
+
+    it('should not double-charge rush delivery fee', () => {
+      const order = {
+        items: [{ sku: 'P6-POTATO', title: '6-pack', kind: 'hot', filling: 'potato', qty: 1, unitPriceCents: 699, addOns: [] }]
+      };
+      
+      const noRush = total(order, { profile: { tier: 'guest' }, delivery: { zone: 'local', rush: false } });
+      const withRush = total(order, { profile: { tier: 'guest' }, delivery: { zone: 'local', rush: true } });
+      
+      // Rush should only add 299 cents, not 598 (double charge)
+      expect(withRush - noRush).toBe(299);
+    });
   });
 
 });
