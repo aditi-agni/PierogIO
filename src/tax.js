@@ -22,6 +22,7 @@ function tax(order, delivery) {
     }
     if (item.kind === 'hot') {
       hasHotItems = true;
+      totalTax += Math.floor((itemTotal * 0.08));
     }
   }
 

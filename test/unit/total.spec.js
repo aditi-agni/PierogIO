@@ -1,8 +1,9 @@
-const { total } = require('../../src/total');
-const { subtotal } = require('../../src/subtotal');
-const { discounts } = require('../../src/discounts');
-const { deliveryFee } = require('../../src/delivery');
-const { tax } = require('../../src/tax');
+import { total } from '../../src/total';
+import { subtotal } from '../../src/subtotal';
+import { discounts } from '../../src/discounts';
+import { deliveryFee } from '../../src/delivery';
+import { tax } from '../../src/tax';
+import { expect } from 'vitest';
 
 describe('Order Calculations', () => {
   
@@ -34,6 +35,7 @@ describe('Order Calculations', () => {
       const orderTotal = total(order, context);
       expect(orderTotal).toBeGreaterThan(0);
       expect(Number.isInteger(orderTotal)).toBe(true);
+      expect(tax(order, context.delivery)).toBe(Math.floor(0.08 * subtotal(order)));
     });
   });
 
