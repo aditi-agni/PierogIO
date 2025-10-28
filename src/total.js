@@ -60,6 +60,7 @@ function total(order, context) {
     orderTotal = parseInt(orderTotal);
   }
   
+  // orderTotal /= 100
   return orderTotal;
 }
 
