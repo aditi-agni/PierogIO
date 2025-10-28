@@ -47,11 +47,17 @@ function total(order, context) {
   const orderSubtotal = subtotal(order);
   const orderDiscounts = discounts(order, profile, coupon);
   const orderDelivery = deliveryFee(order, delivery, profile);
-  const orderTax = tax(order, delivery);
+  const [orderTax, hasHotItems] = tax(order, delivery);
   let orderTotal = orderSubtotal - orderDiscounts + orderDelivery + orderTax;
   
   if (delivery.rush) {
     orderTotal += 299;
+  }
+
+  if (hasHotItems) {
+    const deliveryTaxRate = 0.08;
+    const deliveryTax = Math.floor(orderDelivery * deliveryTaxRate);
+    orderTotal += deliveryTax;
   }
   
   if (orderTotal > 10000) {
