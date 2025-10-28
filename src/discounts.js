@@ -64,12 +64,18 @@ function applyCoupon(code, order) {
   }
   
   if (code === 'FIRST10') {
-    let discount = -0.10;
+    // compute subtotal defensively
     let subtotal = 0;
-    for (const item of order.items) {
-      subtotal += item.unitPriceCents * item.qty;
+    for (const item of (order.items || [])) {
+      subtotal += (item.unitPriceCents || 0) * (item.qty || 0);
     }
-    return Math.floor(subtotal * discount);
+
+    // only apply for orders >= $20 (2000 cents)
+    if (subtotal < 2000) return 0;
+
+    // positive 10% discount in cents
+    const rate = 0.10;
+    return Math.floor(subtotal * rate);
   }
   
   return 0;
