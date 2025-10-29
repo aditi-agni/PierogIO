@@ -7,12 +7,11 @@ const { TaxAPI } = require('../apis/tax-api');
  * @param {Object} delivery - Delivery information
  * @returns {number} - Tax amount in cents
  */
-function tax(order, delivery) {
+function tax(order, orderDelivery) {
   let hasHotItems = false;
   let totalTax = 0;
 
   for (const item of order.items) {
-    console.log(item);
     const itemTotal = item.unitPriceCents * item.qty;
 
     const taxRate = TaxAPI.lookup(item.kind);
@@ -23,15 +22,12 @@ function tax(order, delivery) {
     if (item.kind === 'hot') {
       hasHotItems = true;
     }
-    console.log("total tax" + totalTax);
   }
   if (hasHotItems) {
     const deliveryTaxRate = TaxAPI.lookup('hot');
-    const orderDelivery = deliveryFee(order, delivery, profile);
     const deliveryTax = Math.floor(orderDelivery * deliveryTaxRate / 10000);
     totalTax += deliveryTax;
   }
-  console.log("tax after delivery" + totalTax);
   return totalTax;
 }
 
