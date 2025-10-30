@@ -42,6 +42,10 @@ const { tax } = require('./tax');
  * @returns {number} - Total cost in cents
  */
 function total(order, context) {
+  const hasZeroQty = order.items.some(item => item.qty === 0);
+  if (hasZeroQty) {
+    throw new Error('Order must contain at least one item with quantity greater than zero.');
+  }
   const { profile, delivery, coupon = null } = context;
   
   const orderSubtotal = subtotal(order);
